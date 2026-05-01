@@ -1,0 +1,26 @@
+Introduction
+
+This task presents a scaled-up web infrastructure for hosting www.foobar.com
+The purpose of this design is to improve availability, organization, and scalability compared with the previous infrastructure. In this architecture, an additional server is added, a second HAProxy load balancer is introduced and configured as a cluster with the first one, and the main components are separated so that the web server, application server, and database each have their own dedicated server.
+
+
+When a user wants to access the website, the user types www.foobar.com in the browser. The browser sends a DNS request to resolve the domain name. DNS points the request to the load balancer layer. In this design, the load balancer layer contains two HAProxy load balancers configured as a cluster.
+
+The additional load balancer is added to improve high availability. In the previous design, one load balancer created a Single Point of Failure. If that load balancer failed, users would not be able to access the website. By adding a second HAProxy load balancer and clustering it with the first one, the infrastructure becomes more reliable because one load balancer can continue serving traffic if the other one fails.
+
+The additional server is added to support the separation of components and improve scalability. Instead of keeping several services together on the same machine, the infrastructure is reorganized so that each major component has its own dedicated server.
+
+The load balancer cluster receives requests from users and forwards them to the web server. The web server in this design is Nginx. The role of the web server is to receive HTTP or HTTPS requests, serve static content such as HTML, CSS, JavaScript, and images, and forward dynamic requests to the application server.
+
+The application server is separated onto its own server. The role of the application server is to execute the backend logic of the website. It processes user requests, runs the application code, applies business rules, and communicates with the database when data needs to be stored or retrieved.
+
+The database is also placed on its own dedicated server. The database server uses MySQL and is responsible for storing and retrieving the website data, such as users, content, and application records.
+
+Splitting the components provides several advantages. First, it improves performance because each server focuses on a specific role. Second, it improves scalability because each layer can be scaled independently. For example, if web traffic increases, more web servers can be added without changing the database server. Third, it improves maintainability because each component can be managed, monitored, and updated more easily.
+
+There is also an important difference between a web server and an application server. The web server mainly handles client connections, serves static files, and forwards requests. The application server is responsible for processing the actual business logic of the application. In other words, the web server handles incoming traffic, while the application server handles the application behavior.
+
+
+Conclusion
+
+In conclusion, this scale-up design improves the infrastructure by adding one more server, adding a second HAProxy load balancer in a cluster, and separating the web server, application server, and database onto dedicated servers. This design is more organized, easier to scale, and more reliable than the previous infrastructure. It reduces the risk of failure at the load balancer level and makes each component easier to manage according to its specific role.
