@@ -1,0 +1,28 @@
+Introduction
+
+This task presents a distributed web infrastructure used to host the website www.foobar.com Unlike the simple web stack, this design uses three servers: one server for the HAProxy load balancer and two backend servers that run the website. Each backend server contains an Nginx web server, an application server, application files, and a MySQL database. The goal of this infrastructure is to improve availability, distribute traffic, and reduce the load on a single server.
+
+
+When a user wants to access the website, the user types www.foobar.com in the browser. The browser sends a DNS request to resolve the domain name into an IP address. In this infrastructure, DNS points www.foobar.com to the IP address of the HAProxy load balancer.
+
+The load balancer is added to distribute incoming traffic between multiple backend servers. Instead of sending all requests to one server, HAProxy receives the requests and forwards them to Server 1 or Server 2. This improves availability and helps the website handle more traffic.
+
+The load balancer is configured with the Round Robin distribution algorithm. Round Robin works by sending requests to each server one after another in order. For example, the first request goes to Server 1, the second request goes to Server 2, and the next request goes back to Server 1.
+
+This setup is Active-Active because both backend servers are working and receiving traffic at the same time. In an Active-Active setup, all servers are active and handle user requests together. In an Active-Passive setup, one server handles the traffic while another server stays on standby and is only used if the active server fails.
+
+Each backend server contains Nginx, an application server, application files, and a MySQL database. Nginx receives the HTTP requests and forwards dynamic requests to the application server. The application server runs the backend logic of the website using the application files, which represent the code base. The MySQL database stores and retrieves the website data.
+
+The database is configured as a Primary-Replica cluster. The Primary database handles write operations such as insert, update, and delete. The Replica database copies data from the Primary database and is mainly used for read operations. This helps distribute database workload and provides redundancy.
+
+The difference between the Primary node and the Replica node is that the application writes data to the Primary database, while the Replica database is used mainly for reading data. If the Primary database fails, the application may not be able to write new data unless a failover mechanism is configured.
+
+This infrastructure has some issues. First, the HAProxy load balancer is a Single Point of Failure because there is only one load balancer. If it fails, users cannot reach the backend servers. The Primary database is also a Single Point of Failure for write operations because all write operations depend on it.
+
+Second, there are security issues. There is no firewall protecting the servers, so they may be exposed to unauthorized access. There is also no HTTPS, which means traffic between the user and the website is not encrypted.
+
+Third, there is no monitoring. Without monitoring, it is difficult to detect server failures, high traffic, database problems, or performance issues. This makes troubleshooting harder and can increase downtime.
+
+Conclusion
+
+In conclusion, this distributed web infrastructure is an improvement over the simple one-server design because it adds a load balancer and two backend servers. It allows traffic to be distributed using Round Robin and enables an Active-Active setup. It also introduces a Primary-Replica database structure. However, the design still has weaknesses, including Single Points of Failure, no firewall, no HTTPS, and no monitoring. To make this infrastructure more reliable and secure, it would need additional load balancers, firewalls, SSL/TLS certificates, and monitoring tools.
