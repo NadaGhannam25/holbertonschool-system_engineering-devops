@@ -1,0 +1,26 @@
+
+
+
+When a user wants to access the website, they type www.foobar.com in their browser.
+
+The browser sends a DNS request to resolve www.foobar.com into an IP address. The domain name foobar.com has a www record that points to the server IP address 8.8.8.8.
+
+After DNS resolution, the browser sends an HTTP or HTTPS request to the server over the Internet using TCP/IP.
+
+A server is a physical or virtual machine that provides services to users over a network. In this infrastructure, one server contains all the components needed to run the website.
+
+Nginx is the web server. Its role is to receive the user request, serve static files, and forward dynamic requests to the application server.
+
+The application server runs the backend logic of the website. It uses the application files, which are the code base of the website.
+
+The MySQL database stores and retrieves the website data, such as users, content, and application information.
+
+The server communicates with the user's computer using TCP/IP, and the website traffic uses HTTP or HTTPS.
+
+The www record in www.foobar.com is commonly a CNAME record. However, in this required design, www.foobar.com points to the server IP address 8.8.8.8.
+
+This infrastructure has several issues. First, it has a Single Point of Failure because everything is hosted on one server. If the server goes down, the whole website becomes unavailable.
+
+Second, maintenance can cause downtime. If the web server needs to be restarted or new code is deployed, the website may be unavailable during that time.
+
+Third, this infrastructure cannot scale well. All incoming traffic goes to one server, so if too many users access the website, the server may become slow or crash.
