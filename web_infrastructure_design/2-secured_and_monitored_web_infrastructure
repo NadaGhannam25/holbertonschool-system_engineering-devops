@@ -1,0 +1,37 @@
+Introduction
+
+This task presents a secured and monitored three-server web infrastructure used to host the website www.foobar.com
+This design improves the previous distributed infrastructure by adding firewalls, an SSL certificate for HTTPS traffic, and monitoring clients. The goal is to make the infrastructure more secure, serve encrypted traffic, and collect useful system and application data for monitoring and troubleshooting.
+
+
+When a user wants to access the website, the user types www.foobar.com in the browser. The browser sends a DNS request to resolve the domain name. DNS points www.foobar.com
+to the IP address of the load balancer. The user request is sent over HTTPS, which means the traffic between the user and the website is encrypted.
+
+The first added element is the firewall. This infrastructure includes three firewalls. Firewalls are added to protect the infrastructure from unauthorized access and unwanted network traffic. A firewall controls incoming and outgoing traffic based on security rules. For example, it can allow only HTTP or HTTPS traffic from users and block unsafe or unnecessary ports.
+
+The second added element is the SSL certificate. The SSL certificate is added to serve www.foobar.com over HTTPS. HTTPS encrypts the communication between the user’s browser and the website. This protects sensitive data such as login information, cookies, and user requests from being read or modified by attackers.
+
+The third added element is monitoring. This infrastructure includes three monitoring clients, one on each server. These monitoring clients collect data such as CPU usage, memory usage, disk usage, network traffic, web server logs, application logs, and database performance. The data is sent to a monitoring service such as Sumologic.
+
+Monitoring is used to detect problems, measure performance, and understand the health of the infrastructure. It helps the team know if a server is down, if traffic is too high, if the database is slow, or if the application is producing errors.
+
+The monitoring tool collects data through monitoring agents installed on the servers. These agents read system metrics and log files, then send the collected data to the monitoring platform. The monitoring platform stores, analyzes, and displays the data using dashboards and alerts.
+
+If we want to monitor the web server QPS, which means Queries Per Second or requests per second, we need to collect metrics from Nginx. This can be done by enabling Nginx access logs or the Nginx status module, then configuring the monitoring client to collect and send these metrics to the monitoring service. The monitoring dashboard can then show how many requests the web server handles per second.
+
+The load balancer used in this infrastructure is HAProxy. It receives HTTPS requests from users and distributes traffic between the two backend servers. The load balancer can use the Round Robin algorithm, which sends requests to each backend server one after another in order.
+
+Each backend server contains an Nginx web server, an application server, application files, a MySQL database, and a monitoring client. Nginx receives web requests and forwards dynamic requests to the application server. The application server runs the backend logic using the application files. The MySQL database stores and retrieves the website data.
+
+The database uses a Primary-Replica structure. The Primary database accepts write operations such as insert, update, and delete. The Replica database copies data from the Primary database and is mainly used for read operations.
+
+This infrastructure still has some issues.
+The first issue is terminating SSL at the load balancer level. If SSL is terminated at the load balancer, the traffic between the load balancer and the backend servers may become unencrypted unless HTTPS is also configured internally. This can be a security risk because sensitive data could be exposed inside the internal network.
+
+The second issue is having only one MySQL server capable of accepting writes. In a Primary-Replica database setup, only the Primary database can handle write operations. If the Primary database fails, the application may not be able to write new data until failover is configured. This creates a Single Point of Failure for write operations.
+
+The third issue is having servers with all the same components, including the database, web server, and application server. This can be a problem because each server has multiple responsibilities. If one component uses too many resources, it can affect the other components on the same server. For example, heavy database usage can slow down the web server and application server. It also makes scaling harder because each layer cannot be scaled independently.
+
+Conclusion
+
+In conclusion, this secured and monitored web infrastructure improves the previous design by adding firewalls, HTTPS, and monitoring clients. Firewalls protect the servers from unauthorized traffic, HTTPS encrypts user communication, and monitoring helps detect failures and performance issues. However, the infrastructure still has weaknesses, such as SSL termination at the load balancer, only one database node accepting writes, and servers running too many components at the same time. To improve this design further, internal HTTPS, database failover, separated server roles, and stronger redundancy would be needed.
