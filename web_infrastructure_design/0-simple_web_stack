@@ -1,26 +1,35 @@
 
+Introduction
+
+This task presents a simple one-server web infrastructure used to host the website www.foobar.com 
+The design includes one domain name, one server with the IP address 8.8.8.8, one web server using Nginx, one application server, one set of application files, and one MySQL database.
 
 
-When a user wants to access the website, they type www.foobar.com in their browser.
+When a user wants to access the website, the user types www.foobar.com
+in the browser. The browser sends a DNS request to resolve the domain name into an IP address. The domain name foobar.com has a www record that points to the server IP address 8.8.8.8.
 
-The browser sends a DNS request to resolve www.foobar.com into an IP address. The domain name foobar.com has a www record that points to the server IP address 8.8.8.8.
+The role of the domain name is to make the website easier for users to access. Instead of typing the IP address, the user can type www.foobar.com DNS translates the domain name into the correct IP address.
 
-After DNS resolution, the browser sends an HTTP or HTTPS request to the server over the Internet using TCP/IP.
+The www record in www.foobar.com is commonly a CNAME record. However, in this required design, www.foobar.com points directly to the server IP address 8.8.8.8, which is similar to an A record configuration.
 
-A server is a physical or virtual machine that provides services to users over a network. In this infrastructure, one server contains all the components needed to run the website.
+After DNS resolution, the browser sends an HTTP or HTTPS request to the server over the Internet. The server communicates with the user’s computer using TCP/IP.
+
+A server is a physical or virtual machine that provides services, resources, or data to users over a network. In this infrastructure, one server contains all the components needed to run the website.
 
 Nginx is the web server. Its role is to receive the user request, serve static files, and forward dynamic requests to the application server.
 
-The application server runs the backend logic of the website. It uses the application files, which are the code base of the website.
+The application server runs the backend logic of the website. It processes user requests, executes the application code, and communicates with the database when needed.
+
+The application files are the code base of the website. They contain the source code and features of the application.
 
 The MySQL database stores and retrieves the website data, such as users, content, and application information.
 
-The server communicates with the user's computer using TCP/IP, and the website traffic uses HTTP or HTTPS.
+This infrastructure has several issues. First, it has a Single Point of Failure because everything is hosted on one server. If the server fails, the whole website becomes unavailable.
 
-The www record in www.foobar.com is commonly a CNAME record. However, in this required design, www.foobar.com points to the server IP address 8.8.8.8.
-
-This infrastructure has several issues. First, it has a Single Point of Failure because everything is hosted on one server. If the server goes down, the whole website becomes unavailable.
-
-Second, maintenance can cause downtime. If the web server needs to be restarted or new code is deployed, the website may be unavailable during that time.
+Second, maintenance can cause downtime. If new code is deployed or if the web server needs to be restarted, the website may be unavailable during that time.
 
 Third, this infrastructure cannot scale well. All incoming traffic goes to one server, so if too many users access the website, the server may become slow or crash.
+
+Conclusion
+
+In conclusion, this simple web stack explains how www.foobar.comcan be hosted using one server. It includes DNS, Nginx, an application server, application files, and MySQL. This design is useful for understanding basic web infrastructure, but it is not reliable for high traffic because it has a Single Point of Failure, downtime during maintenance, and limited scalability.
